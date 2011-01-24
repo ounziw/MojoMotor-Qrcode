@@ -3,21 +3,52 @@
 class Qrcode
 {
     var $addon;
-    var $site_structure;
-    var $_current_url;
-    var $addon_version = 1.0;
+    var $_page = "top";
+    var $_size = 150;
+    var $_errorlevel = "L";
+    var $_url;
+    var $_urlformat = 'http://chart.apis.google.com/chart?chs=%1$sx%1$s&cht=qr&chld=%2$s&chl=%3$s';
 
     function __construct()
     {
         $this->addon =& get_instance();
         $this->addon->load->helper(array('page', 'array'));
         $this->addon->load->model(array('page_model'));
-        $this->site_structure = $this->addon->site_model->get_setting('site_structure');
     }
 
-    function _get_site_url()
+    function create($template_data = array())
     {
-        return site_url();
+        $qrlink = $this->_get_qrurl($template_data['parameters']['page'],$template_data['parameters']['size'],$template_data['parameters']['errorlevel']);
+        return '<img src="' . $qrlink . '">';
+    }
+    function _get_qrurl($page="",$size="",$errorlevel="")
+    {
+        if ( $page == "current" )
+        {
+            $this->_page = "current";
+        }
+        if ( $size >=1 && $size <= 600 )
+        {
+            $this->_size = $size;
+        }
+        if ( in_array($errorlevel,array("L","M","Q","H")))
+        {
+            $this->_errorlevel = $errorlevel;
+        }
+    $this->_url = $this->_dataurl($this->_page);
+    return sprintf($this->_urlformat, $this->_size, $this->_errorlevel, $this->_url);
+    }
+
+    function _dataurl($page)
+    {
+        if ( $page == "current" )
+        {
+            return $this->_get_current_url();
+        }
+        else
+        {
+            return site_url();
+        }
     }
 
     function _get_current_url()
@@ -28,8 +59,10 @@ class Qrcode
     function test()
     {
         $this->addon->load->library('unit_test');
-        $this->addon->unit->run(site_url(),'http://localhost/');
         $this->addon->unit->run($this->_get_current_url(),'http://localhost/index.php/page/about','PASS on "about" page, else Fail');
+        $this->addon->unit->run($this->_dataurl(),site_url());
+        $this->addon->unit->run($this->_dataurl("current"),$this->_get_current_url());
+        $this->addon->unit->run($this->_get_qrurl(),'is_string');
         echo $this->addon->unit->report();
     }
 }
