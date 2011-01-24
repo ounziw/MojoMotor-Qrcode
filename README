@@ -1,0 +1,32 @@
+# QR Code
+
+Version: 1.0
+
+Author: [Fumito Mizuno](http://twitter.com/ounziw)
+
+QR Code add-on outputs the qrcode for your MojoMotor site, or page.
+
+##Installation
+
+Copy the addon in a folder named 'qrcode' in system/mojomotor/third_party
+
+##Usage
+
+QR Code add-on has a function:
+
+    {mojo:qrcode:create}
+
+simply returns the qrcode for your site.
+
+Optionally, you can set the current page url for qr code.
+
+    {mojo:qrcode:create page="current"}
+
+returns the qrcode for the page where the qrcode is displayed.
+
+You can also set the size and/or errorlevel of the qrcode.
+
+    {mojo:qrcode:create size="200"}
+    {mojo:qrcode:create errorlevel="M"}
+
+Size can be between 1 and 600. Errorlevel can be L, M, Q, or H.
