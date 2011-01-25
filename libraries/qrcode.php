@@ -1,5 +1,34 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * * Qrcode 
+ * *
+ * * @package MojoMotor
+ * * @subpackage Addons
+ * * @author Fumito Mizuno
+ * * @link http://mojomotor.php-web.net/
+ * * @license Apache License v2.0
+ * * @copyright 2010 Fumito Mizuno
+ * *
+ * * Licensed under the Apache License, Version 2.0 (the "License");
+ * * you may not use this file except in compliance with the License.
+ * * You may obtain a copy of the License at
+ * *
+ * * http://www.apache.org/licenses/LICENSE-2.0
+ * *
+ * * Unless required by applicable law or agreed to in writing, software
+ * * distributed under the License is distributed on an "AS IS" BASIS,
+ * * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * * See the License for the specific language governing permissions and
+ * * limitations under the License.
+ * *
+ * * USAGE
+ * * {mojo:qrcode:create}
+ * * {mojo:qrcode:create size="200"}
+ * * {mojo:qrcode:create errorlevel="M"}
+ * * Size can be between 1 and 600.
+ * * Errorlevel can be L, M, Q, or H.s
+ */
 class Qrcode
 {
     var $addon;
@@ -8,7 +37,14 @@ class Qrcode
     var $_errorlevel = "L";
     var $_url;
     var $_urlformat = 'http://chart.apis.google.com/chart?chs=%1$sx%1$s&cht=qr&chld=%2$s&chl=%3$s';
+    var $addon_version = 1.0;
 
+    /**
+     * __construct 
+     * 
+     * @access protected
+     * @return void
+     */
     function __construct()
     {
         $this->addon =& get_instance();
@@ -16,6 +52,13 @@ class Qrcode
         $this->addon->load->model(array('page_model'));
     }
 
+    /**
+     * create 
+     * 
+     * @param array $template_data 
+     * @access public
+     * @return void
+     */
     function create($template_data = array())
     {
         $qrlink = $this->_get_qrurl($template_data['parameters']['page'],$template_data['parameters']['size'],$template_data['parameters']['errorlevel']);
@@ -39,6 +82,13 @@ class Qrcode
     return sprintf($this->_urlformat, $this->_size, $this->_errorlevel, $this->_url);
     }
 
+    /**
+     * _dataurl 
+     * 
+     * @param mixed $page 
+     * @access protected
+     * @return void
+     */
     function _dataurl($page)
     {
         if ( $page == "current" )
@@ -51,6 +101,12 @@ class Qrcode
         }
     }
 
+    /**
+     * _get_current_url 
+     * 
+     * @access protected
+     * @return void
+     */
     function _get_current_url()
     {
         return site_url('page/' . $this->addon->mojomotor_parser->url_title);
