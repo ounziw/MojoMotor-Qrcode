@@ -1,6 +1,6 @@
 # QR Code
 
-Version: 1.0
+Version: 1.1
 
 Author: [Fumito Mizuno](http://twitter.com/ounziw)
 
@@ -30,3 +30,7 @@ You can also set the size and/or errorlevel of the qrcode.
     {mojo:qrcode:create errorlevel="M"}
 
 Size can be between 1 and 600. Errorlevel can be L, M, Q, or H.
+
+## Change Log
+1.1 Modified for MM1.1
+1.0 New Release

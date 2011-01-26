@@ -109,7 +109,7 @@ class Qrcode
      */
     function _get_current_url()
     {
-        return site_url('page/' . $this->addon->mojomotor_parser->url_title);
+        return site_url('' . $this->addon->mojomotor_parser->url_title);
     }
 
     function test()
